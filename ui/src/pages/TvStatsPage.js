@@ -32,21 +32,21 @@ const BuddyCard = ({ buddy, top }) => {
 const TvStatsPage = ({ children, anchor, nextAnchor }) => (
     <Page className='bg-dark' anchor={anchor}>
         <CardGrid>
-            <BuddyCard top={children.top10[0]} buddy={children.top_buddy} />
+            <BuddyCard top={children.top10[0]} buddy={children.topBuddy} />
             <Card colour="purple" className="text-white" numx={2} numy={2}>
-                <span className='display-3'>{humanizeDuration(children.most_paused.paused_duration)}</span>
+                <span className='display-3'>{humanizeDuration(children.mostPaused.pausedDuration)}</span>
                 <br />
-                Your longest pause when you watched {children.most_paused.title}
+                Your longest pause when you watched {children.mostPaused.title}
             </Card>
             <Card colour="greenyellow" numx={2} numy={2}>
-                <span className='display-3'>{children.total_episodes}</span>
+                <span className='display-3'>{children.totalEpisodes}</span>
                 <br />
                 Number of episodes you have watched.
                 <br />
                 More than you expected?
             </Card>
             <Card colour="orange" numx={2} numy={2}>
-                <span className='display-3'>{humanizeDuration(children.total_watch_time)}</span>
+                <span className='display-3'>{humanizeDuration(children.totalWatchTime)}</span>
                 <br />
                 Total time spent in 2020 watching TV shows.
             </Card>

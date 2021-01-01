@@ -23,12 +23,20 @@
     <ItemGroup>
       <None Remove="Model\Tautulli\Sql\BrowserUsage.sql" />
       <None Remove="Model\Tautulli\Sql\BrowserUsage_User.sql" />
+      <None Remove="Model\Tautulli\Sql\MostPopular.sql" />
+      <None Remove="Model\Tautulli\Sql\Thumbnail.sql" />
+      <None Remove="Model\Tautulli\Sql\TvBuddy.sql" />
       <None Remove="Model\Tautulli\Sql\UserByEmail.sql" />
+      <None Remove="Model\Tautulli\Sql\WatchHistoryMovies.sql" />
       <None Remove="Model\Tautulli\Sql\WatchHistoryTv.sql" />
     </ItemGroup>
 
     <ItemGroup>
+      <EmbeddedResource Include="Model\Tautulli\Sql\Thumbnail.sql" />
+      <EmbeddedResource Include="Model\Tautulli\Sql\TvBuddy.sql" />
+      <EmbeddedResource Include="Model\Tautulli\Sql\MostPopular.sql" />
       <EmbeddedResource Include="Model\Tautulli\Sql\BrowserUsage.sql" />
+      <EmbeddedResource Include="Model\Tautulli\Sql\WatchHistoryMovies.sql" />
       <EmbeddedResource Include="Model\Tautulli\Sql\WatchHistoryTv.sql" />
       <EmbeddedResource Include="Model\Tautulli\Sql\UserByEmail.sql" />
     </ItemGroup>

@@ -9,5 +9,6 @@ namespace Your2020.Service.Config
         string GetTautulliApiKey();
         string GetMoviesLibraryId();
         string GetTvShowsLibraryId();
+        string GetPlexUrl();
     }
 }

@@ -3,4 +3,5 @@
     max-width: 100vw !important;
     position: relative;
     opacity: 0.9;
+    overflow: auto;
 }

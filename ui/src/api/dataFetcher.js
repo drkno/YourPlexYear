@@ -1,13 +1,10 @@
-import exampleData from './exampleData';
-
-const sleep = x => new Promise(resolve => setTimeout(resolve, x));
+const API_URL = '/api/v1/stats/2020';
 
 class DataFetcher {
-    delay = 100;
-
     async getData() {
-        await sleep(this.delay);
-        return exampleData;
+        const response = await fetch(API_URL);
+        const json = await response.json();
+        return json;
     }
 }
 

@@ -17,7 +17,7 @@ namespace Your2020.Model
         public UserIdentity(IEnumerable<Claim> claims)
         {
             AccessTier = GetClaim(claims, Constants.AccessTierClaim, AccessTier.NoAccess, str => (AccessTier)Enum.Parse(typeof(AccessTier), str));
-            AccessToken = GetClaim(claims, Constants.AccessTokenClaim, null, value => new AccessToken(value));
+            AccessToken = GetClaim(claims, Constants.AccessTokenClaim, new AccessToken("fixme"), value => new AccessToken(value));
             ServerIdentifier = GetClaim(claims, Constants.ServerIdentifierClaim, null, value => new ServerIdentifier(value));
             Username = GetClaim(claims, Constants.UsernameClaim, null, value => new Username(value));
             Email = GetClaim(claims, Constants.EmailClaim, null, value => new Email(value));

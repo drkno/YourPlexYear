@@ -96,6 +96,11 @@ namespace Your2020.Service.Config
         {
             throw new NotImplementedException();
         }
+
+        public string GetPlexUrl()
+        {
+            return _config.PlexPublicHostname;
+        }
     }
 }
 

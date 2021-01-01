@@ -9,7 +9,7 @@ const MovieStatsPage = ({ children, anchor, nextAnchor }) => (
     <Page className='bg-dark' anchor={anchor}>
         <CardGrid>
             <Card colour="red" numx={2} numy={2}>
-                <span className='display-3'>{children.finished_percent}%</span>
+                <span className='display-3'>{children.finishedPercent.toFixed(2)}%</span>
                 <br />
                 Average movie finishing percentage in 2020.
                 <br />
@@ -17,9 +17,9 @@ const MovieStatsPage = ({ children, anchor, nextAnchor }) => (
                 You're not watching the credits like a nerd, are you?
             </Card>
             <Card colour="purple" className='text-white' numx={2} numy={2}>
-                <span className='display-3'>{humanizeDuration(children.most_paused.paused_duration)}</span>
+                <span className='display-3'>{humanizeDuration(children.mostPaused.pausedDuration)}</span>
                 <br />
-                Your longest movie pause when you watched {children.most_paused.title} ({children.most_paused.year})
+                Your longest movie pause when you watched {children.mostPaused.title} ({children.mostPaused.year})
             </Card>
             <Card colour="greenyellow" numx={2} numy={2}>
                 <span className='display-3'>{children.oldest.title} ({children.oldest.year})</span>
@@ -29,7 +29,7 @@ const MovieStatsPage = ({ children, anchor, nextAnchor }) => (
                 Enjoying the classics, huh?
             </Card>
             <Card colour="orange" numx={2} numy={2}>
-                <span className='display-3'>{humanizeDuration(children.total_watch_time)}</span>
+                <span className='display-3'>{humanizeDuration(children.totalWatchTime)}</span>
                 <br />
                 Total time spent in 2020 watching movies.
             </Card>

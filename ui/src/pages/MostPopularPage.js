@@ -12,7 +12,7 @@ const MostPopularItem = ({ children, item }) => (
         <br />
         <img className='img-thumbnail rounded section-top-page-img' src={children.thumbnail}></img>
         <p className='display-2 text-warning'>{children.title}</p>
-        <p>{children.plays} {pluralise(children.plays, 'play')}.</p>
+        <p>{children.plays} {pluralise(children.plays, 'play')}</p>
     </Card>
 );
 

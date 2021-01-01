@@ -30,12 +30,15 @@ namespace Your2020.Model
 
     public class MediaItem : IComparable<MediaItem>
     {
+        public long Id { get; set; }
         public string Title { get; set; }
         public long Duration { get; set; }
         public long Plays { get; set; }
+        public long? Episodes { get; set; }
         public short? Year { get; set; }
         public long PausedDuration { get; set; }
         public string Thumbnail { get; set; }
+        public decimal FinishedPercent { get; set; }
         public int CompareTo(MediaItem? other)
         {
             if (other == null)
