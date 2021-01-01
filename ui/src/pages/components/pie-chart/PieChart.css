@@ -1,0 +1,11 @@
+.pie-chart {
+    display: inline-block;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.pie-chart > svg {
+    width: 100% !important;
+    height: unset;
+    max-width: 400px;
+}

@@ -1,0 +1,6 @@
+.page-container {
+    min-height: 100vh;
+    max-width: 100vw !important;
+    position: relative;
+    opacity: 0.9;
+}

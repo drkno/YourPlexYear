@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace PlexSSO.Service.PlexClient
+namespace Your2020.Service.PlexClient
 {
     public interface IPlexClient
     {

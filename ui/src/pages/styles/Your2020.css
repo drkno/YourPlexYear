@@ -1,0 +1,15 @@
+.section-top-page {
+    margin-bottom: 0 !important;
+}
+
+.section-top-page-img {
+    height: 30vh !important;
+}
+
+.intro-page {
+    background: linear-gradient(0deg, rgb(1, 1, 1), rgba(200, 0, 150, 0.4));
+}
+
+.conclusion-page {
+    background: linear-gradient(0deg,  rgba(200, 0, 150, 0.4), rgb(1, 1, 1));
+}

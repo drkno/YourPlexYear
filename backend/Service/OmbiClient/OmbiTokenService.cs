@@ -4,10 +4,10 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using PlexSSO.Service.Config;
-using PlexSSO.Service.PlexClient;
+using Your2020.Service.Config;
+using Your2020.Service.PlexClient;
 
-namespace PlexSSO.Service.OmbiClient
+namespace Your2020.Service.OmbiClient
 {
     public class OmbiTokenService : IOmbiTokenService
     {

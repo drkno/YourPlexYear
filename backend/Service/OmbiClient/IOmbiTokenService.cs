@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using PlexSSO.Service.PlexClient;
+using Your2020.Service.PlexClient;
 
-namespace PlexSSO.Service.OmbiClient
+namespace Your2020.Service.OmbiClient
 {
     public interface IOmbiTokenService
     {

@@ -1,13 +1,13 @@
-using static PlexSSO.Service.Config.PlexSsoConfig;
-
-namespace PlexSSO.Service.Config
+namespace Your2020.Service.Config
 {
     public interface IConfigurationService
     {
-        PlexSsoConfig GetConfig();
-        AccessControl[] GetAccessControls(string serviceName);
+        YourYearConfig GetConfig();
         string GetConfigurationDirectory();
         string GetOmbiUrl();
         string GetTautulliUrl();
+        string GetTautulliApiKey();
+        string GetMoviesLibraryId();
+        string GetTvShowsLibraryId();
     }
 }

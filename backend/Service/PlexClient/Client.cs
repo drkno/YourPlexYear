@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace PlexSSO.Service.PlexClient
+namespace Your2020.Service.PlexClient
 {
     public class Client : IPlexClient
     {
@@ -19,7 +19,7 @@ namespace PlexSSO.Service.PlexClient
         public async Task<User> GetUserInfo(PlexToken token)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, "https://plex.tv/users/account");
-            request.Headers.Add("X-Plex-Product", "PlexSSO");
+            request.Headers.Add("X-Plex-Product", "Your2020");
             request.Headers.Add("X-Plex-Version", "Plex OAuth");
             request.Headers.Add("X-Plex-Client-Identifier", "PlexSSOv2");
             request.Headers.Add("X-Plex-Token", token.Value);
@@ -44,7 +44,7 @@ namespace PlexSSO.Service.PlexClient
             var request = new HttpRequestMessage(HttpMethod.Get, "https://plex.tv/api/resources");
             request.Headers.Add("includeHttps", "1");
             request.Headers.Add("includeRelay", "1");
-            request.Headers.Add("X-Plex-Product", "PlexSSO");
+            request.Headers.Add("X-Plex-Product", "Your2020");
             request.Headers.Add("X-Plex-Version", "Plex OAuth");
             request.Headers.Add("X-Plex-Client-Identifier", "PlexSSOv2");
             request.Headers.Add("X-Plex-Token", token.Value);

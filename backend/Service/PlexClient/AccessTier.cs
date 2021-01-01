@@ -1,4 +1,4 @@
-namespace PlexSSO.Service.PlexClient
+namespace Your2020.Service.PlexClient
 {
     public enum AccessTier
     {

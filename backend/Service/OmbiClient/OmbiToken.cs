@@ -1,6 +1,6 @@
 using System;
 
-namespace PlexSSO.Service.OmbiClient
+namespace Your2020.Service.OmbiClient
 {
     public class OmbiToken : ValueType<string>
     {

@@ -1,0 +1,15 @@
+.vertical-center-container-absolute {
+    position: absolute;
+}
+
+.vertical-center-container-relative {
+    position: relative;
+}
+
+.vertical-center-container-absolute, .vertical-center-container-relative {
+    display: block;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 100%;
+}

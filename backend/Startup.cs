@@ -8,13 +8,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PlexSSO.Service.Auth;
-using PlexSSO.Service.Config;
-using PlexSSO.Service.OmbiClient;
-using PlexSSO.Service.PlexClient;
-using PlexSSO.Service.TautulliClient;
+using Your2020.Service.Config;
+using Your2020.Service.OmbiClient;
+using Your2020.Service.PlexClient;
+using Your2020.Service.TautulliClient;
 
-namespace PlexSSO
+namespace Your2020
 {
     public class Startup
     {
@@ -46,10 +45,10 @@ namespace PlexSSO
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
-                    options.AccessDeniedPath = "/sso/403";
+                    options.AccessDeniedPath = "/idk";
                     options.Cookie.Name = "kPlexSSOKookieV2";
-                    options.LoginPath = "/api/v2/login";
-                    options.LogoutPath = "/api/v2/logout";
+                    options.LoginPath = "/idk";
+                    options.LogoutPath = "/idk";
                     options.ExpireTimeSpan = TimeSpan.FromDays(1);
                     var cookieDomain = ConfigurationService.GetConfig().CookieDomain;
                     if (!string.IsNullOrWhiteSpace(cookieDomain))
@@ -60,9 +59,8 @@ namespace PlexSSO
             services.AddHealthChecks();
             services.AddSingleton<IPlexClient, Client>();
             services.AddSingleton<IConfigurationService>(ConfigurationService);
-            services.AddSingleton<IAuthValidator, AuthenticationValidator>();
             services.AddSingleton<IOmbiTokenService, OmbiTokenService>();
-            services.AddSingleton<ITautulliTokenService, TautulliClient>();
+            services.AddSingleton<ITautulliClient, TautulliClient>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -73,7 +71,7 @@ namespace PlexSSO
             }
             else
             {
-                app.UseExceptionHandler("/sso/403");
+                app.UseExceptionHandler("/idk");
             }
             app.Use((context, next) => {
                 context.Response.Headers.Add(PoweredByHeaderName, PoweredByHeaderValue);
@@ -92,7 +90,7 @@ namespace PlexSSO
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(name: "default", pattern: "{controller}/{action=Index}/{id?}");
-                endpoints.MapHealthChecks("/api/v2/healthcheck");
+                endpoints.MapHealthChecks("/api/v1/healthcheck");
             });
         }
     }

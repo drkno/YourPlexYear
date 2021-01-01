@@ -1,4 +1,4 @@
-namespace PlexSSO.Service.TautulliClient
+namespace Your2020.Service.TautulliClient
 {
     public class TautulliTokenResponse
     {

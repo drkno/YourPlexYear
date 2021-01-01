@@ -1,3 +1,8 @@
+html {
+    scroll-behavior: smooth;
+    user-select: none;
+}
+
 body {
     margin: 0 !important;
     padding: 0 !important;
@@ -7,7 +12,11 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    background-color: black;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(./img/background.jpg);
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 #root {

@@ -1,11 +1,13 @@
 {
-    "name": "@plexauth/sso",
-    "version": "2.1.2",
+    "name": "@plexauth/year",
+    "version": "1.0.0",
     "private": true,
     "dependencies": {
-        "bootstrap": "^4.5.3",
+        "bootstrap": "^5.0.0-beta1",
+        "humanize-duration": "^3.25.0",
         "react": "^17.0.1",
-        "react-dom": "^17.0.1"
+        "react-dom": "^17.0.1",
+        "recharts": "^1.8.5"
     },
     "devDependencies": {
         "react-scripts": "^4.0.1"
@@ -16,7 +18,7 @@
         "test": "react-scripts test --env=jsdom",
         "eject": "react-scripts eject"
     },
-    "proxy": "http://localhost:4200",
+    "proxy": "http://localhost:4201",
     "browserslist": [
         ">0.2%",
         "not dead",

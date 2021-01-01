@@ -1,0 +1,24 @@
+.anchor-scroll {
+    font-size: 5em;
+    cursor: pointer;
+    display: block;
+    transform-origin: left;
+    position: absolute;
+    color: unset;
+    text-decoration: none;
+}
+
+.anchor-scroll > a, .anchor-scroll > a:hover, .anchor-scroll > a:visited {
+    color: unset;
+    text-decoration: none;
+}
+
+.anchor-scroll-down {
+    bottom: 0%;
+    left: 50%;
+}
+
+.anchor-scroll-down > a {
+    transform: translateX(-50%) rotate(90deg);
+    display: block;
+}

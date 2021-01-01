@@ -1,6 +1,6 @@
 using System;
 
-namespace PlexSSO.Service.PlexClient
+namespace Your2020.Service.PlexClient
 {
     public class PlexToken : ValueType<string>
     {
