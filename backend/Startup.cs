@@ -31,6 +31,8 @@ namespace Your2020
         {
             services.AddDataProtection()
                 .PersistKeysToFileSystem(new DirectoryInfo(ConfigurationService.GetConfigurationDirectory()))
+                .SetDefaultKeyLifetime(TimeSpan.FromDays(500))
+                .SetApplicationName("PlexSSO")
                 .DisableAutomaticKeyGeneration();
             
             services.AddControllersWithViews().AddJsonOptions(opt =>

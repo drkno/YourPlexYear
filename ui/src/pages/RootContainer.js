@@ -27,11 +27,20 @@ class RootContainer extends React.Component {
 
     async componentDidMount() {
         this.shouldLoadData = true;
-        const data = await dataFetcher.getData();
-        if (this.shouldLoadData) {
-            this.setState(Object.assign({
+        let data;
+        try {
+            data = await dataFetcher.getData();
+            data = Object.assign({
                 loaded: true
-            }, data));
+            }, data);
+        } catch(e) {
+            console.error(e);
+            data = {
+                loadingText: 'Error :('
+            };
+        }
+        if (this.shouldLoadData) {
+            this.setState(data);
         }
     }
 
@@ -41,7 +50,7 @@ class RootContainer extends React.Component {
 
     render() {
         if (!this.state || !this.state.loaded) {
-            return (<LoadingPlaceholder />);
+            return (<LoadingPlaceholder>{this.state.loadingText || 'Loading'}</LoadingPlaceholder>);
         }
 
         return (

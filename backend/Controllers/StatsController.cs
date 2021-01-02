@@ -55,7 +55,7 @@ namespace Your2020.Controllers
             var identity = Identity;
             var username = identity.Username;
 
-            var userResponse = await _tautulliClient.ExecuteSqlQuery<UserResponse>(string.Format(Query.UserByEmailQuery, identity.Email));
+            var userResponse = await _tautulliClient.ExecuteSqlQuery<UserResponse>(string.Format(Query.UserByEmailQuery, identity.Email.Value));
 
             var browserResponse = await _tautulliClient.ExecuteSqlQuery<BrowserResponse>(Query.BrowserUsageQuery);
             var globalBrowsersDict = new Dictionary<string, long>();

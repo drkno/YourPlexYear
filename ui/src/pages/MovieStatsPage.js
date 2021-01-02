@@ -9,7 +9,7 @@ const MovieStatsPage = ({ children, anchor, nextAnchor }) => (
     <Page className='bg-dark' anchor={anchor}>
         <CardGrid>
             <Card colour="red" numx={2} numy={2}>
-                <span className='display-3'>{children.finishedPercent.toFixed(2)}%</span>
+                <span className='display-3'>{Math.min(children.finishedPercent, 100.00).toFixed(2)}%</span>
                 <br />
                 Average movie finishing percentage in 2020.
                 <br />
