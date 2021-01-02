@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -104,7 +105,7 @@ namespace Your2020.Service.TautulliClient
                 url = extraParameters.Aggregate(url, (current, pair) => current + ("&" + Uri.EscapeDataString(pair.Key) + "=" + Uri.EscapeDataString(pair.Value)));
             }
 
-            Console.WriteLine(url);
+            Debug.WriteLine(url);
 
             var request = new HttpRequestMessage(HttpMethod.Get, url);
 

@@ -1,5 +1,5 @@
 select
-    max(h.rating_key) as id,
+    max(coalesce(nullif(h.rating_key,''), 0)) as id,
     title,
     sum(stopped - started) * 1000 as duration,
     min(max(coalesce(nullif(view_offset,''),1.0))*100/max(coalesce(nullif(duration,''),1.0)),100) as finishedPercent,

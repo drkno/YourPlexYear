@@ -1,5 +1,5 @@
 select
-    max(h.grandparent_rating_key) as id,
+    max(coalesce(nullif(h.grandparent_rating_key,''), 0)) as id,
     grandparent_title as title,
     sum(stopped - started) * 1000 as duration,
     min(sum(coalesce(nullif(view_offset,''),1.0))*100/sum(coalesce(nullif(duration,''),1.0)),100) as finishedPercent,

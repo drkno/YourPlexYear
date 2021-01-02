@@ -2,15 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Your2020.Model;
 using Your2020.Model.Tautulli.Sql;
 using Your2020.Service.Config;
-using Your2020.Service.PlexClient;
 using Your2020.Service.TautulliClient;
 
 namespace Your2020.Controllers
@@ -23,9 +19,7 @@ namespace Your2020.Controllers
         private readonly IConfigurationService _configuration;
         private readonly HttpClient _httpClient;
 
-        public StatsController(ILogger<StatsController> logger,
-                               IPlexClient plexClient,
-                               ITautulliClient tautulliClient,
+        public StatsController(ITautulliClient tautulliClient,
                                IConfigurationService configuration,
                                IHttpClientFactory clientFactory)
         {
@@ -56,6 +50,10 @@ namespace Your2020.Controllers
             var username = identity.Username;
 
             var userResponse = await _tautulliClient.ExecuteSqlQuery<UserResponse>(string.Format(Query.UserByEmailQuery, identity.Email.Value));
+            if (username.Value == "fixme")
+            {
+                username = new Username(userResponse[0].Username);
+            }
 
             var browserResponse = await _tautulliClient.ExecuteSqlQuery<BrowserResponse>(Query.BrowserUsageQuery);
             var globalBrowsersDict = new Dictionary<string, long>();
@@ -90,7 +88,33 @@ namespace Your2020.Controllers
             FixPlexThumbnailUrls(moviesResponse);
             FixPlexThumbnailUrls(popularResponse);
 
-            var tvBuddy = await _tautulliClient.ExecuteSqlQuery<BuddyResponse>(string.Format(Query.TvBuddy, tvResponse[0].Title, userResponse[0].UserId));
+            var tvBuddy = tvResponse.Count > 0
+                ? await _tautulliClient.ExecuteSqlQuery<BuddyResponse>(string.Format(Query.TvBuddy, tvResponse[0].Title,
+                    userResponse[0].UserId))
+                : new List<BuddyResponse>();
+
+            var placeholder = new MediaItem
+            {
+                Duration = 0,
+                Episodes = 0,
+                FinishedPercent = 0,
+                Id = 0,
+                PausedDuration = 0,
+                Plays = 0,
+                Thumbnail = "None",
+                Title = "None :(",
+                Year = 1970
+            };
+
+            if (tvResponse.Count == 0)
+            {
+                tvResponse.Add(placeholder);
+            }
+
+            if (moviesResponse.Count == 0)
+            {
+                moviesResponse.Add(placeholder);
+            }
 
             return new StatsResponse()
             {
@@ -122,41 +146,6 @@ namespace Your2020.Controllers
                 GlobalBrowsers = globalBrowsers,
                 YourBrowsers = yourBrowsers
             };
-        }
-
-        class UserResponse
-        {
-            public string Username { get; set; }
-            public string Email { get; set; }
-            [JsonPropertyName("user_id")]
-            public long UserId { get; set; }
-        }
-
-        class BrowserResponse
-        {
-            [JsonPropertyName("user_id")]
-            public long UserId { get; set; }
-            public string Platform { get; set; }
-            public long Count { get; set; }
-        }
-
-        class SessionHistoryResponse
-        {
-            [JsonPropertyName("user_id")]
-            public long UserId { get; set; }
-            public long Started { get; set; }
-            public long Stopped { get; set; }
-
-        }
-
-        class BuddyResponse
-        {
-            public string Buddy { get; set; }
-        }
-
-        class ThumbnailResponse
-        {
-            public string Thumbnail { get; set; }
         }
 
         private void FixPlexThumbnailUrls(IEnumerable<MediaItem> mediaItems)

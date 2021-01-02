@@ -9,8 +9,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Your2020.Service.Config;
-using Your2020.Service.OmbiClient;
-using Your2020.Service.PlexClient;
 using Your2020.Service.TautulliClient;
 
 namespace Your2020
@@ -60,9 +58,7 @@ namespace Your2020
                     }
                 });
             services.AddHealthChecks();
-            services.AddSingleton<IPlexClient, Client>();
             services.AddSingleton<IConfigurationService>(ConfigurationService);
-            services.AddSingleton<IOmbiTokenService, OmbiTokenService>();
             services.AddSingleton<ITautulliClient, TautulliClient>();
         }
 
