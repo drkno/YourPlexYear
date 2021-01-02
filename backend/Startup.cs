@@ -30,7 +30,8 @@ namespace Your2020
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDataProtection()
-                .PersistKeysToFileSystem(new DirectoryInfo(ConfigurationService.GetConfigurationDirectory()));
+                .PersistKeysToFileSystem(new DirectoryInfo(ConfigurationService.GetConfigurationDirectory()))
+                .DisableAutomaticKeyGeneration();
             
             services.AddControllersWithViews().AddJsonOptions(opt =>
             {

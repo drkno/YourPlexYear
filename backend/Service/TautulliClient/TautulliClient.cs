@@ -104,6 +104,8 @@ namespace Your2020.Service.TautulliClient
                 url = extraParameters.Aggregate(url, (current, pair) => current + ("&" + Uri.EscapeDataString(pair.Key) + "=" + Uri.EscapeDataString(pair.Value)));
             }
 
+            Console.WriteLine(url);
+
             var request = new HttpRequestMessage(HttpMethod.Get, url);
 
             request.Headers.Add("Accept", USER_AGENT_HEADER);
