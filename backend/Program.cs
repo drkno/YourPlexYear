@@ -1,14 +1,23 @@
+using System.Linq;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Your2020.Service;
 
 namespace Your2020
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
+            if (args.Contains("--healthcheck"))
+            {
+                await HealthChecker.CheckHealth($"http://127.0.0.1:4201/api/v1/healthcheck");
+                return;
+            }
+
             WebHost.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
