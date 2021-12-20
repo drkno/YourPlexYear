@@ -1,4 +1,4 @@
-﻿namespace Your2020.Model
+﻿namespace YourPlexYear.Model
 {
     public enum MediaType
     {

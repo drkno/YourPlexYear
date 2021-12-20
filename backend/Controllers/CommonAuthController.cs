@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Your2020.Model;
+using YourPlexYear.Model;
 
-namespace Your2020.Controllers
+namespace YourPlexYear.Controllers
 {
     public abstract class CommonAuthController : ControllerBase
     {

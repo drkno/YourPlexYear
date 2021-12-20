@@ -6,7 +6,18 @@
     position: relative;
 }
 
-.vertical-center-container-absolute, .vertical-center-container-relative {
+@media (min-width: 768px) {
+    .vertical-center-container-dynamic {
+        position: absolute;
+    }
+}
+@media (max-width: 767px) {
+    .vertical-center-container-dynamic {
+        position: relative;
+    }
+}
+
+.vertical-center-container-absolute, .vertical-center-container-relative, .vertical-center-container-dynamic {
     display: block;
     top: 50%;
     left: 50%;

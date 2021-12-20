@@ -1,6 +1,6 @@
 using System;
 
-namespace Your2020.Service.TautulliClient
+namespace YourPlexYear.Service.Tautulli.Client
 {
     public class TautulliToken : ValueType<string>
     {

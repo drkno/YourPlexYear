@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Your2020.Service
+namespace YourPlexYear.Service
 {
     public static class HealthChecker
     {

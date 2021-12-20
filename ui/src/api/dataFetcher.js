@@ -1,8 +1,8 @@
-const API_URL = '/api/v1/stats/2020';
+const API_URL = '/api/v1/stats/';
 
 class DataFetcher {
-    async getData() {
-        const response = await fetch(API_URL);
+    async getData(year) {
+        const response = await fetch(API_URL + year);
         const json = await response.json();
         return json;
     }

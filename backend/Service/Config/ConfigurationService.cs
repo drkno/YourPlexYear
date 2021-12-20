@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Configuration;
 
-namespace Your2020.Service.Config
+namespace YourPlexYear.Service.Config
 {
     public class ConfigurationService : IConfigurationService
     {

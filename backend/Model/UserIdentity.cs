@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 
-namespace Your2020.Model
+namespace YourPlexYear.Model
 {
     public class UserIdentity
     {

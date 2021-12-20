@@ -1,4 +1,4 @@
-namespace Your2020.Service.Config
+namespace YourPlexYear.Service.Config
 {
     public class YourYearConfig
     {

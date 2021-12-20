@@ -1,4 +1,4 @@
-namespace Your2020.Model
+namespace YourPlexYear.Model
 {
     public static class Constants
     {
@@ -8,8 +8,8 @@ namespace Your2020.Model
         public const string UsernameClaim = "Username";
         public const string EmailClaim = "Email";
         public const string ThumbnailClaim = "Thumbnail";
-        public const string SsoServiceHeader = "X-Your2020-For";
-        public const string SsoOrigionalUriHeader = "X-Your2020-Original-URI";
+        public const string SsoServiceHeader = "X-YourPlexYear-For";
+        public const string SsoOrigionalUriHeader = "X-YourPlexYear-Original-URI";
         public const string UpstreamProtocolHeader = "X-Upstream-Protocol";
         public const string ForwardedProtoHeader = "X-Forwarded-Proto";
         public const string FrontEndHttpsHeader = "Front-End-Https";

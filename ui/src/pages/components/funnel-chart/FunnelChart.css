@@ -1,0 +1,21 @@
+.funnel-chart {
+    width: 100%;
+
+}
+
+.funnel-chart > tbody > tr > td {
+    white-space: nowrap;
+}
+
+.funnel-chart > tbody > tr > td:nth-child(1) {
+    text-align: left;
+}
+
+.funnel-chart > tbody > tr > td:nth-child(2) {
+    width: 100%;
+}
+
+.funnel-chart > tbody > tr > td > div {
+    display: inline-block;
+    padding: 2px;
+}

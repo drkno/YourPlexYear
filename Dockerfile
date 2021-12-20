@@ -17,7 +17,7 @@ WORKDIR /app
 COPY --from=aspnet-builder /backend/build /app
 RUN mkdir -p /config && \
     chmod 777 /config
-ENTRYPOINT ["dotnet", "Your2020.dll", "--config", "/config/"]
+ENTRYPOINT ["dotnet", "YourPlexYear.dll", "--config", "/config/"]
 EXPOSE 4200
 VOLUME [ "/config" ]
-HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD [ "dotnet", "Your2020.dll", "--healthcheck" ]
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD [ "dotnet", "YourPlexYear.dll", "--healthcheck" ]

@@ -4,26 +4,40 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Your2020.Model;
-using Your2020.Model.Tautulli.Sql;
-using Your2020.Service.Config;
-using Your2020.Service.TautulliClient;
+using YourPlexYear.Model;
+using YourPlexYear.Model.Tautulli;
+using YourPlexYear.Model.Tautulli.Sql;
+using YourPlexYear.Service.Config;
+using YourPlexYear.Service.Tautulli.Service;
 
-namespace Your2020.Controllers
+namespace YourPlexYear.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
     public class StatsController : CommonAuthController
     {
-        private readonly ITautulliClient _tautulliClient;
+        private static readonly MediaItem Placeholder = new()
+        {
+            Duration = 0,
+            Episodes = 0,
+            FinishedPercent = 0,
+            Id = 0,
+            PausedDuration = 0,
+            Plays = 0,
+            Thumbnail = "None",
+            Title = "None :(",
+            Year = 1970
+        };
+        
+        private readonly ITautulliService _tautulliService;
         private readonly IConfigurationService _configuration;
         private readonly HttpClient _httpClient;
 
-        public StatsController(ITautulliClient tautulliClient,
+        public StatsController(ITautulliService tautulliService,
                                IConfigurationService configuration,
                                IHttpClientFactory clientFactory)
         {
-            _tautulliClient = tautulliClient;
+            _tautulliService = tautulliService;
             _configuration = configuration;
             _httpClient = clientFactory.CreateClient();
         }
@@ -31,10 +45,10 @@ namespace Your2020.Controllers
         [HttpGet("thumbProxy")]
         public async Task<IActionResult> ProxyThumbnail(long id)
         {
-            var thumbnailResponse = await _tautulliClient.ExecuteSqlQuery<ThumbnailResponse>(string.Format(Query.Thumbnail, id));
-            var url = _configuration.GetPlexUrl() + thumbnailResponse[0].Thumbnail + "?X-Plex-Token=" + Identity.AccessToken.Value;
+            var tautulliThumbnail = await _tautulliService.GetThumbnail(id);
+            var thumbnailUrl = tautulliThumbnail.GetPlexUrl(Identity.AccessToken, _configuration.GetPlexUrl());
 
-            var request = new HttpRequestMessage(HttpMethod.Get, url);
+            var request = new HttpRequestMessage(HttpMethod.Get, thumbnailUrl);
 
             var response = await _httpClient.SendAsync(request);
             response.EnsureSuccessStatusCode();
@@ -43,26 +57,113 @@ namespace Your2020.Controllers
         }
 
 
-        [HttpGet("2020")]
-        public async Task<StatsResponse> GetStats()
+        [HttpGet("{year}")]
+        public async Task<StatsResponse> GetStats(ushort year)
         {
-            var identity = Identity;
-            var username = identity.Username;
-
-            var userResponse = await _tautulliClient.ExecuteSqlQuery<UserResponse>(string.Format(Query.UserByEmailQuery, identity.Email.Value));
+            var username = Identity.Username;
+            var tautulliUser = await _tautulliService.GetUserByEmail(Identity.Email.Value);
             if (username.Value == "fixme")
             {
-                username = new Username(userResponse[0].Username);
+                username = new Username(tautulliUser.Username);
             }
 
-            var browserResponse = await _tautulliClient.ExecuteSqlQuery<BrowserResponse>(Query.BrowserUsageQuery);
+            var browserUsage = CalculateBrowserUsage(year, tautulliUser);
+            var popularMedia = CalculatePopular(year);
+            var tvShows = CalculateTvShows(year, tautulliUser, popularMedia);
+            var movies = CalculateMovies(year, tautulliUser, popularMedia);
+            var watchDays = _tautulliService.GetViewingDay(tautulliUser.UserId, year);
+            
+            return new StatsResponse()
+            {
+                Username = username.Value,
+                Tautulli = _configuration.GetTautulliUrl(),
+                Ombi = _configuration.GetOmbiUrl(),
+                Tv = (await tvShows),
+                Movies = (await movies),
+                GlobalBrowsers = (await browserUsage).globalBrowsers,
+                YourBrowsers = (await browserUsage).yourBrowsers,
+                WatchDays = (await watchDays)
+            };
+        }
+
+        private async Task<MediaLibrary> CalculateMovies(ushort year, TautulliUser user, Task<MostPopular> popularMedia)
+        {
+            var movies = await _tautulliService.GetMovieWatchHistory(user.UserId, year);
+
+            FixPlexThumbnailUrls(movies);
+
+            if (movies.Count == 0)
+            {
+                movies.Add(Placeholder);
+            }
+
+            return new MediaLibrary
+            {
+                Total = movies.Count,
+                Top10 = movies.GetRange(0, Math.Min(10, movies.Count)),
+                TotalWatchTime = movies.Select(movie => movie.Duration).Sum(),
+                Oldest = movies.Aggregate(movies[0], (acc, curr) => acc.Year < curr.Year ? acc : curr),
+                FinishedPercent = movies.Sum(movie => movie.FinishedPercent) / movies.Count,
+                MostPaused = movies.Aggregate(movies[0],
+                    (acc, curr) => acc.PausedDuration > curr.PausedDuration ? acc : curr),
+                Popular = (await popularMedia).Movie
+            };
+        }
+
+        private async Task<MediaLibrary> CalculateTvShows(ushort year, TautulliUser user, Task<MostPopular> popularMedia)
+        {
+            var shows = await _tautulliService.GetTvWatchHistory(user.UserId, year);
+            FixPlexThumbnailUrls(shows);
+
+            var tvBuddy = CalculateTvBuddy(shows, user, year);
+
+            if (shows.Count == 0)
+            {
+                shows.Add(Placeholder);
+            }
+
+            return new MediaLibrary
+            {
+                Total = shows.Count,
+                Top10 = shows.GetRange(0, Math.Min(10, shows.Count)),
+                TotalWatchTime = shows.Select(tv => tv.Duration).Sum(),
+                Oldest = shows.Aggregate(shows[0], (acc, curr) => acc.Year < curr.Year ? acc : curr),
+                FinishedPercent = shows.Sum(tv => tv.FinishedPercent) / shows.Count,
+                MostPaused = shows.Aggregate(shows[0],
+                    (acc, curr) => acc.PausedDuration > curr.PausedDuration ? acc : curr),
+                TotalEpisodes = shows.Select(tv => tv.Episodes).Sum(),
+                TopBuddy = (await tvBuddy)?.BuddyUsername,
+                Popular = (await popularMedia).TvShow
+            };
+        }
+
+        private Task<TautulliBuddy> CalculateTvBuddy(List<MediaItem> watchHistory, TautulliUser user, ushort year)
+        {
+            if (watchHistory.Count == 0)
+            {
+                return Task.FromResult<TautulliBuddy>(null);
+            }
+            return _tautulliService.GetTvBuddy(watchHistory[0].Title, user.UserId, year);
+        }
+
+        private async Task<MostPopular> CalculatePopular(ushort year)
+        {
+            var popularMedia = await _tautulliService.GetMostPopularMedia(year);
+            FixPlexThumbnailUrls(popularMedia.Movie);
+            FixPlexThumbnailUrls(popularMedia.TvShow);
+            return popularMedia;
+        }
+
+        private async Task<(List<Browser> globalBrowsers, List<Browser> yourBrowsers)> CalculateBrowserUsage(ushort year, TautulliUser user)
+        {
+            var browserUsage = await _tautulliService.GetBrowserUsage(year);
             var globalBrowsersDict = new Dictionary<string, long>();
             var userBrowsersDict = new Dictionary<string, long>();
-            foreach (var browser in browserResponse)
+            foreach (var browser in browserUsage)
             {
                 globalBrowsersDict[browser.Platform] =
                     globalBrowsersDict.GetValueOrDefault(browser.Platform, 0) + browser.Count;
-                if (userResponse[0].UserId == browser.UserId)
+                if (user.UserId == browser.UserId)
                 {
                     userBrowsersDict[browser.Platform] =
                         userBrowsersDict.GetValueOrDefault(browser.Platform, 0) + browser.Count;
@@ -75,82 +176,20 @@ namespace Your2020.Controllers
             var yourBrowsers = userBrowsersDict.Select(entry => new Browser {Name = entry.Key, Value = entry.Value}).ToList();
             yourBrowsers.Sort((a, b) => (int)(b.Value - a.Value));
 
-            var tvResponse =
-                await _tautulliClient.ExecuteSqlQuery<MediaItem>(string.Format(Query.TvWatchHistoryQuery, userResponse[0].UserId));
-
-            var moviesResponse =
-                await _tautulliClient.ExecuteSqlQuery<MediaItem>(string.Format(Query.MoviesWatchHistoryQuery, userResponse[0].UserId));
-
-            var popularResponse =
-                await _tautulliClient.ExecuteSqlQuery<MediaItem>(Query.MostPopular);
-
-            FixPlexThumbnailUrls(tvResponse);
-            FixPlexThumbnailUrls(moviesResponse);
-            FixPlexThumbnailUrls(popularResponse);
-
-            var tvBuddy = tvResponse.Count > 0
-                ? await _tautulliClient.ExecuteSqlQuery<BuddyResponse>(string.Format(Query.TvBuddy, tvResponse[0].Title,
-                    userResponse[0].UserId))
-                : new List<BuddyResponse>();
-
-            var placeholder = new MediaItem
-            {
-                Duration = 0,
-                Episodes = 0,
-                FinishedPercent = 0,
-                Id = 0,
-                PausedDuration = 0,
-                Plays = 0,
-                Thumbnail = "None",
-                Title = "None :(",
-                Year = 1970
-            };
-
-            if (tvResponse.Count == 0)
-            {
-                tvResponse.Add(placeholder);
-            }
-
-            if (moviesResponse.Count == 0)
-            {
-                moviesResponse.Add(placeholder);
-            }
-
-            return new StatsResponse()
-            {
-                Username = username.Value,
-                Tautulli = _configuration.GetTautulliUrl(),
-                Ombi = _configuration.GetOmbiUrl(),
-                Tv = new MediaLibrary
-                {
-                    Total = tvResponse.Count,
-                    Top10 = tvResponse.GetRange(0, Math.Min(10, tvResponse.Count)),
-                    TotalWatchTime = tvResponse.Select(tv => tv.Duration).Sum(),
-                    Oldest = tvResponse.Aggregate(tvResponse[0], (acc, curr) => acc.Year < curr.Year ? acc : curr),
-                    FinishedPercent = tvResponse.Sum(tv => tv.FinishedPercent) / tvResponse.Count,
-                    MostPaused = tvResponse.Aggregate(tvResponse[0], (acc, curr) => acc.PausedDuration > curr.PausedDuration ? acc : curr),
-                    Popular = popularResponse[1],
-                    TopBuddy = tvBuddy.Count > 0 ? tvBuddy[0].Buddy : null,
-                    TotalEpisodes = tvResponse.Select(tv => tv.Episodes).Sum()
-                },
-                Movies = new MediaLibrary
-                {
-                    Total = moviesResponse.Count,
-                    Top10 = moviesResponse.GetRange(0, Math.Min(10, moviesResponse.Count)),
-                    TotalWatchTime = moviesResponse.Select(movie => movie.Duration).Sum(),
-                    Oldest = moviesResponse.Aggregate(moviesResponse[0], (acc, curr) => acc.Year < curr.Year ? acc : curr),
-                    FinishedPercent = moviesResponse.Sum(movie => movie.FinishedPercent) / tvResponse.Count,
-                    MostPaused = moviesResponse.Aggregate(moviesResponse[0], (acc, curr) => acc.PausedDuration > curr.PausedDuration ? acc : curr),
-                    Popular = popularResponse[0]
-                },
-                GlobalBrowsers = globalBrowsers,
-                YourBrowsers = yourBrowsers
-            };
+            return (globalBrowsers, yourBrowsers);
         }
 
         private void FixPlexThumbnailUrls(IEnumerable<MediaItem> mediaItems)
         {
             foreach (var mediaItem in mediaItems)
+            {
+                FixPlexThumbnailUrls(mediaItem);
+            }
+        }
+
+        private void FixPlexThumbnailUrls(MediaItem mediaItem)
+        {
+            if (mediaItem != null)
             {
                 mediaItem.Thumbnail = "/api/v1/stats/thumbProxy?id=" + mediaItem.Id;
             }

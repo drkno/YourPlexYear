@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using YourPlexYear.Model.Tautulli.Sql;
 
-namespace Your2020.Model
+namespace YourPlexYear.Model
 {
     public class StatsResponse
     {
@@ -12,6 +13,7 @@ namespace Your2020.Model
         public MediaLibrary Movies{ get; set; }
         public List<Browser> GlobalBrowsers{ get; set; }
         public List<Browser> YourBrowsers{ get; set; }
+        public List<ViewingDay> WatchDays { get; set; }
     }
 
     public class MediaLibrary

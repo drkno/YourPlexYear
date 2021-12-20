@@ -1,5 +1,5 @@
 .anchor-scroll {
-    font-size: 5em;
+    font-size: 3em !important;
     cursor: pointer;
     display: block;
     transform-origin: left;
@@ -21,4 +21,17 @@
 .anchor-scroll-down > a {
     transform: translateX(-50%) rotate(90deg);
     display: block;
+}
+
+@media (min-width: 768px) {
+    .anchor-scroll-mobile {
+        display: none;
+    }
+}
+@media (max-width: 767px) {
+    .anchor-scroll-mobile {
+        position: absolute;
+        bottom: 0;
+        top: 125%;
+    }
 }

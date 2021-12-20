@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Your2020.Model;
-using Your2020.Model.Tautulli;
+using YourPlexYear.Model;
+using YourPlexYear.Model.Tautulli;
 
-namespace Your2020.Service.TautulliClient
+namespace YourPlexYear.Service.Tautulli.Client
 {
     public interface ITautulliClient
     {

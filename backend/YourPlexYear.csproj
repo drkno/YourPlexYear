@@ -1,12 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
         <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
         <IsPackable>false</IsPackable>
         <SpaRoot>ui\</SpaRoot>
         <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+        <LangVersion>10</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -39,6 +40,8 @@
       <EmbeddedResource Include="Model\Tautulli\Sql\WatchHistoryMovies.sql" />
       <EmbeddedResource Include="Model\Tautulli\Sql\WatchHistoryTv.sql" />
       <EmbeddedResource Include="Model\Tautulli\Sql\UserByEmail.sql" />
+      <None Remove="Model\Tautulli\Sql\ViewingDay.sql" />
+      <EmbeddedResource Include="Model\Tautulli\Sql\ViewingDay.sql" />
     </ItemGroup>
 
     <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">

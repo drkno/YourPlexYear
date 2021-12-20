@@ -1,27 +1,8 @@
 import React from 'react';
 import { PieChart as RechartsPieChart, Pie, Tooltip, Cell } from 'recharts';
+import { colourList, labelColour } from '../theme';
 
 import './PieChart.css';
-
-const colourList = [
-    '#dc3545',
-    '#ffc107',
-    '#007bff',
-    '#28a745',
-    '#17a2b8',
-    '#6c757d',
-    '#f8f9fa'
-];
-
-const labelColour = [
-    'white',
-    'black',
-    'white',
-    'white',
-    'white',
-    'white',
-    'black'
-];
 
 const RADIAN = Math.PI / 180;
 const renderLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, name, index }) => {
@@ -38,7 +19,11 @@ const renderLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, name
 
 const PieChart = ({ data, dataKey='value' }) => (
     <RechartsPieChart width={400} height={400} className='pie-chart'>
-        <Pie dataKey={dataKey} data={data} isAnimationActive label={renderLabel} labelLine={false}>
+        <Pie dataKey={dataKey}
+             data={data}
+             isAnimationActive
+             label={renderLabel}
+             labelLine={false}>
             {
                 data.map((_, index) => (<Cell fill={colourList[index % colourList.length]} />))
             }

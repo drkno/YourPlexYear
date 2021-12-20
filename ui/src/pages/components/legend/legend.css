@@ -1,0 +1,9 @@
+.chart-legend {
+    padding: 3;
+    white-space: nowrap;
+}
+
+.chart-legend-container {
+    line-break: anywhere;
+    line-height: 1.6em;
+}

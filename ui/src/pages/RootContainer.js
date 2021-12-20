@@ -9,11 +9,19 @@ import SectionTopPage from './SectionTopPage';
 import Top10Page from './Top10Page';
 import MovieStatsPage from './MovieStatsPage';
 import TvStatsPage from './TvStatsPage';
+import WatchDayPage from './WatchDayPage';
 import MostPopularPage from './MostPopularPage';
 import BrowserUsagePage from './BrowserUsagePage';
 import ConclusionPage from './ConclusionPage';
 
-import './styles/Your2020.css';
+import './styles/YourPlexYear.css';
+
+const ensure = (obj, ...path) => {
+    for (let p of path) {
+        obj[p] = obj[p] || {};
+        obj = obj[p];
+    }
+}
 
 class RootContainer extends React.Component {
     shouldLoadData = true;
@@ -29,7 +37,9 @@ class RootContainer extends React.Component {
         this.shouldLoadData = true;
         let data;
         try {
-            data = await dataFetcher.getData();
+            data = await dataFetcher.getData(this.props.year);
+            ensure(data, 'tv', 'popular');
+            ensure(data, 'movies', 'popular');
             data = Object.assign({
                 loaded: true
             }, data);
@@ -55,7 +65,7 @@ class RootContainer extends React.Component {
 
         return (
             <div>
-                <IntroPage nextAnchor='movies-overview'>
+                <IntroPage nextAnchor='movies-overview' year={this.props.year}>
                     {this.state.username}
                 </IntroPage>
 
@@ -64,16 +74,19 @@ class RootContainer extends React.Component {
                                 nextAnchor='movies-top-10'
                                 mostWatched={this.state.movies.top10[0]}
                                 mediaType='movie'
-                                total={this.state.movies.total}>
+                                total={this.state.movies.total}
+                                year={this.props.year}>
                     Let's look at some
                 </SectionTopPage>
                 <Top10Page anchor='movies-top-10'
                            nextAnchor='movies-stats'
                            items={this.state.movies.top10}
                            mediaType='movie'
-                           includeYear={true} />
+                           includeYear={true}
+                           year={this.props.year} />
                 <MovieStatsPage anchor='movies-stats'
-                                nextAnchor='tv-overview'>
+                                nextAnchor='tv-overview'
+                                year={this.props.year}>
                     {this.state.movies}
                 </MovieStatsPage>
 
@@ -82,17 +95,25 @@ class RootContainer extends React.Component {
                                 nextAnchor='tv-top-10'
                                 mostWatched={this.state.tv.top10[0]}
                                 mediaType='TV show'
-                                total={this.state.tv.total}>
+                                total={this.state.tv.total}
+                                year={this.props.year}>
                     Now, let's have a look at some
                 </SectionTopPage>
                 <Top10Page anchor='tv-top-10'
                            nextAnchor='tv-stats'
                            items={this.state.tv.top10}
                            mediaType='TV show'
-                           includeYear={false} />
-                <TvStatsPage anchor='tv-stats' nextAnchor='most-popular'>
+                           includeYear={false}
+                           year={this.props.year} />
+                <TvStatsPage anchor='tv-stats' nextAnchor='watch-days' year={this.props.year}>
                     {this.state.tv}
                 </TvStatsPage>
+
+                {/* Watch Days */}
+                <WatchDayPage anchor='watch-days'
+                              nextAnchor='most-popular'
+                              days={this.state.watchDays}
+                              year={this.props.year} />
 
                 {/* General Stats */}
                 <MostPopularPage anchor='most-popular'

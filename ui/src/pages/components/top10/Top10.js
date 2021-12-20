@@ -28,11 +28,10 @@ const Top10Row = ({ children, includeYear, index }) => {
     );
 };
 
-const Top10 = ({ children, includeYear, mediaType }) => {
-
+const Top10 = ({ children, includeYear, mediaType, year }) => {
     return (
         <div>
-            <h1>Your top 10 {pluralise(children.length, mediaType)} in 2020</h1>
+            <h1>Your top 10 {pluralise(children.length, mediaType)} in {year}</h1>
             <div className='table-responsive'>
                 <table className='table table-dark'>
                     <thead className='thead-dark'>

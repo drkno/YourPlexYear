@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Your2020.Model.Tautulli
+namespace YourPlexYear.Model.Tautulli
 {
     public class Play
     {

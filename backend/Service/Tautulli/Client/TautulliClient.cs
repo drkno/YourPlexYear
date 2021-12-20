@@ -6,16 +6,16 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Your2020.Model;
-using Your2020.Model.Tautulli;
-using Your2020.Service.Config;
+using YourPlexYear.Model;
+using YourPlexYear.Model.Tautulli;
+using YourPlexYear.Service.Config;
 
-namespace Your2020.Service.TautulliClient
+namespace YourPlexYear.Service.Tautulli.Client
 {
     public class TautulliClient : ITautulliClient
     {
         private const string ACCEPT_HEADER = "application/json";
-        private const string USER_AGENT_HEADER = "Your2020/1";
+        private const string USER_AGENT_HEADER = "YourPlexYear/1";
 
         private readonly HttpClient _httpClient;
         private readonly IConfigurationService _configurationService;
@@ -105,7 +105,8 @@ namespace Your2020.Service.TautulliClient
                 url = extraParameters.Aggregate(url, (current, pair) => current + ("&" + Uri.EscapeDataString(pair.Key) + "=" + Uri.EscapeDataString(pair.Value)));
             }
 
-            Debug.WriteLine(url);
+            Debug.WriteLine(url.Replace(" ", "%20"));
+            Debug.WriteLine(cmd);
 
             var request = new HttpRequestMessage(HttpMethod.Get, url);
 

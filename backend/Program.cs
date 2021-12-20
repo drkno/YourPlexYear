@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Your2020.Service;
+using YourPlexYear.Service;
 
-namespace Your2020
+namespace YourPlexYear
 {
     public class Program
     {

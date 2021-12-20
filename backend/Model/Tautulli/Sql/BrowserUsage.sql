@@ -5,8 +5,8 @@ select
 from
     session_history
 where
-    started >= 1577797200
-    and stopped <= 1609419540
+    started >= {0}
+    and stopped <= {1}
 group by
     user_id,
     platform

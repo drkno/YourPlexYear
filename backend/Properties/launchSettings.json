@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Your2020": {
+    "YourPlexYear": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

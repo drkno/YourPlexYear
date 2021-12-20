@@ -8,10 +8,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Your2020.Service.Config;
-using Your2020.Service.TautulliClient;
+using YourPlexYear.Service.Config;
+using YourPlexYear.Service.Tautulli.Client;
+using YourPlexYear.Service.Tautulli.Service;
 
-namespace Your2020
+namespace YourPlexYear
 {
     public class Startup
     {
@@ -60,6 +61,7 @@ namespace Your2020
             services.AddHealthChecks();
             services.AddSingleton<IConfigurationService>(ConfigurationService);
             services.AddSingleton<ITautulliClient, TautulliClient>();
+            services.AddSingleton<ITautulliService, TautulliService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

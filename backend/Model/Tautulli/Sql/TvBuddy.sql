@@ -9,8 +9,8 @@ where
     m.media_type = 'episode'
     and grandparent_title = '{0}'
     and user_id!='{1}'
-    and started >= 1577797200
-    and stopped <= 1609419540
+    and started >= {2}
+    and stopped <= {3}
 group by
     user_id
 order by

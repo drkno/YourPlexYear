@@ -1,0 +1,16 @@
+.treemap-chart {
+    display: inline-block;
+    text-align: center;
+}
+
+.treemap-root {
+    position: relative;
+    display: inline-block;
+}
+
+.treemap-segment {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
