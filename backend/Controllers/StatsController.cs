@@ -46,7 +46,7 @@ namespace YourPlexYear.Controllers
         public async Task<IActionResult> ProxyThumbnail(long id)
         {
             var tautulliThumbnail = await _tautulliService.GetThumbnail(id);
-            var thumbnailUrl = tautulliThumbnail.GetPlexUrl(Identity.AccessToken, _configuration.GetPlexUrl());
+            var thumbnailUrl = tautulliThumbnail.GetTautulliUrl(_configuration.GetTautulliUrl());
 
             var request = new HttpRequestMessage(HttpMethod.Get, thumbnailUrl);
 

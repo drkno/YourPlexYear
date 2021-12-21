@@ -1,0 +1,72 @@
+version: '3.4'
+services:
+    yourplexyear:
+        container_name: yourplexyear
+        image: drkno/your2020:latest
+        restart: unless-stopped
+        labels:
+            - com.centurylinklabs.watchtower.enable=true
+        environment:
+            - TZ=Australia/Sydney
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+            - ./config/yourplexyear:/config
+        user: "1000:1000"
+        stop_grace_period: 120s
+
+    sso:
+        container_name: sso
+        image: drkno/plexsso:latest
+        restart: unless-stopped
+        labels:
+            - com.centurylinklabs.watchtower.enable=true
+        environment:
+            - TZ=Australia/Sydney
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+            - ./config/sso:/config
+        command: -s myplexserverid -c .mysite.com
+        user: "1000:1000"
+        stop_grace_period: 120s
+        
+    tautulli:
+        container_name: tautulli
+        image: tautulli/tautulli:latest
+        restart: unless-stopped
+        labels:
+            - com.centurylinklabs.watchtower.enable=true
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ=Australia/Sydney
+        volumes:
+            - ./config/tautulli:/config
+        depends_on:
+            - plex
+        stop_grace_period: 120s
+
+    letsencrypt:
+        container_name: letsencrypt
+        image: ghcr.io/linuxserver/swag:latest
+        restart: unless-stopped
+        labels:
+            - com.centurylinklabs.watchtower.enable=false
+        cap_add:
+            - MKNOD
+            - SYS_ADMIN
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ=Australia/Sydney
+            - URL=mysite.com
+            - SUBDOMAINS=wildcard
+            - VALIDATION=dns
+            - DNSPLUGIN=cloudflare
+            - EMAIL=admin@mysite.com
+            - STAGING=false
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+            - ./config/letsencrypt:/config
+        ports:
+            - 80:80/tcp
+            - 443:443/tcp
