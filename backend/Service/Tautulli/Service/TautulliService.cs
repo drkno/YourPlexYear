@@ -27,6 +27,11 @@ public class TautulliService : ITautulliService
         return _tautulliClient.ExecuteSqlQuery<TautulliThumbnail>(Query.GetThumbnailQuery(id));
     }
 
+    public Task<byte[]> GetThumbnailImage(long id)
+    {
+        return _tautulliClient.GetImage(id);
+    }
+
     public async Task<TautulliUser> GetUserByEmail(string email)
     {
         var users = await GetUsersByEmail(email);

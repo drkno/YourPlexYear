@@ -10,6 +10,7 @@ public interface ITautulliService
 {
     Task<TautulliThumbnail> GetThumbnail(long id);
     Task<List<TautulliThumbnail>> GetThumbnails(long id);
+    Task<byte[]> GetThumbnailImage(long id);
     Task<TautulliUser> GetUserByEmail(string email);
     Task<List<TautulliUser>> GetUsersByEmail(string email);
     Task<List<WebBrowserUsage>> GetBrowserUsage(ushort year);

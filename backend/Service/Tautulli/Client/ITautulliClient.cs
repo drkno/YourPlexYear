@@ -15,5 +15,6 @@ namespace YourPlexYear.Service.Tautulli.Client
             int length = -1, string search = null);
 
         Task<List<T>> ExecuteSqlQuery<T>(string sql);
+        Task<byte[]> GetImage(long ratingKey);
     }
 }

@@ -45,17 +45,9 @@ namespace YourPlexYear.Controllers
         [HttpGet("thumbProxy")]
         public async Task<IActionResult> ProxyThumbnail(long id)
         {
-            var tautulliThumbnail = await _tautulliService.GetThumbnail(id);
-            var thumbnailUrl = tautulliThumbnail.GetTautulliUrl(_configuration.GetTautulliUrl());
-
-            var request = new HttpRequestMessage(HttpMethod.Get, thumbnailUrl);
-
-            var response = await _httpClient.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-
-            return File(response.Content.ReadAsStream(), "image/jpeg");
+            var thumbnailImage = await _tautulliService.GetThumbnailImage(id);
+            return File(thumbnailImage, "image/jpeg");
         }
-
 
         [HttpGet("{year}")]
         public async Task<StatsResponse> GetStats(ushort year)

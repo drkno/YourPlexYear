@@ -97,7 +97,29 @@ namespace YourPlexYear.Service.Tautulli.Client
             return (await response).Value;
         }
 
+        public async Task<byte[]> GetImage(long ratingKey)
+        {
+            var response = GetRawTautulliResource("pms_image_proxy", new Dictionary<string, string>()
+            {
+                { "rating_key", ratingKey.ToString() }
+            });
+            return (await response);
+        }
+
         private async Task<Response<T>> GetTautulliResource<T>(string cmd, IDictionary<string, string> extraParameters = null)
+        {
+            var bytes = await GetRawTautulliResource(cmd, extraParameters);
+            var parsedResponse = JsonSerializer.Deserialize<Response<T>>(bytes, new JsonSerializerOptions
+            {
+                AllowTrailingCommas = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                PropertyNameCaseInsensitive = true
+            });
+
+            return parsedResponse;
+        }
+        
+        private async Task<byte[]> GetRawTautulliResource(string cmd, IDictionary<string, string> extraParameters = null)
         {
             var url = _configurationService.GetTautulliUrl() + "/api/v2?apikey=" + _configurationService.GetTautulliApiKey() + "&cmd=" + cmd;
             if (extraParameters != null)
@@ -116,17 +138,7 @@ namespace YourPlexYear.Service.Tautulli.Client
             var response = await _httpClient.SendAsync(request);
             response.EnsureSuccessStatusCode();
 
-            var json = await response.Content.ReadAsStringAsync();
-
-            var parsedResponse = JsonSerializer.Deserialize<Response<T>>(json, new JsonSerializerOptions
-            {
-                AllowTrailingCommas = true,
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                PropertyNameCaseInsensitive = true,
-                
-            });
-
-            return parsedResponse;
+            return await response.Content.ReadAsByteArrayAsync();
         }
     }
 }
