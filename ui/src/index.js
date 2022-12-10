@@ -1,6 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-
+import { createRoot } from 'react-dom/client';
 import App from './pages/RootContainer';
 
 import 'bootstrap/dist/css/bootstrap.css';
@@ -25,5 +23,7 @@ const getYear = () => {
 };
 
 if (!redirectToYear()) {
-    ReactDOM.render(<App year={getYear()} />, document.getElementById('root'));
+    const container = document.getElementById('root');
+    const root = createRoot(container);
+    root.render(<App year={getYear()} />);
 }
